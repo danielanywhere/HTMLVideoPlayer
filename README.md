@@ -84,13 +84,14 @@ To be as general-purpose as possible, and completely reusable for different vide
 Following is an example of the fully-filled iframe reference used for the demo at the end of this page.
 
 <blockquote>
-&lt;iframe width=&quot;960&quot; height=&quot;540&quot;
+&lt;iframe width=&quot;700&quot; height=&quot;394&quot;
 src=&quot;https&colon;&sol;&sol;danielanywhere.github.io/VideoPlayer.html?showHotspot=0&amp;video=ForcedPerspective-2019051303.mp4&amp;buttonTime=53&amp;buttonLeft=1.302&amp;buttonTop=10.463&amp;buttonWidth=28.125&amp;buttonHeight=23.704&amp;target=TestTarget.html&quot;&gt;&lt;/iframe&gt;
 </blockquote>
 
 ## Demo
-Following is a link to the demo video with a clickable button that appears at 53 seconds.
+This README file isn't allowed to include an IFRAME view, so the working demo is placed in the VideoPlayer/Index.html example page of my profile page on this website.
 
-<iframe width="700" height="394"
-src="https://danielanywhere.github.io/VideoPlayer.html?showHotspot=0&video=ForcedPerspective-2019051303.mp4&buttonTime=53&buttonLeft=1.302&buttonTop=10.463&buttonWidth=28.125&buttonHeight=23.704&target=TestTarget.html"></iframe>
+Follow this link to see the demo video with a clickable button that appears at 53 seconds.
+
+
 
