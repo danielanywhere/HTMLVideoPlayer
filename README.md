@@ -85,7 +85,7 @@ Following is an example of the fully-filled iframe reference used for the demo a
 
 <blockquote>
 &lt;iframe width=&quot;960&quot; height=&quot;540&quot;
-src="https://danielanywhere.github.io/VideoPlayer.html?showHotspot=0&amp;video=ForcedPerspective-2019051303.mp4&amp;buttonTime=53&amp;buttonLeft=1.302&amp;buttonTop=10.463&amp;buttonWidth=28.125&amp;buttonHeight=23.704&amp;target=TestTarget.html"&gt;&lt;/iframe&gt;
+src=&quot;https&colon;&sol;&sol;danielanywhere.github.io/VideoPlayer.html?showHotspot=0&amp;video=ForcedPerspective-2019051303.mp4&amp;buttonTime=53&amp;buttonLeft=1.302&amp;buttonTop=10.463&amp;buttonWidth=28.125&amp;buttonHeight=23.704&amp;target=TestTarget.html&quot;&gt;&lt;/iframe&gt;
 </blockquote>
 
 ## Demo
