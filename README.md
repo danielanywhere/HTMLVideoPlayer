@@ -11,7 +11,8 @@ To run the VideoPlayer from a site of your choosing, you will need the following
 
  - VideoPlayer.html
  - VideoPlayer.css
- - VideoPlayer.js
+ - scripts/jquery-3.4.1.min.js
+ - scripts/VideoPlayer.js
 
 Additionally, for this version of the control, you will need a <b>./videos</b> subfolder that contains the video to be displayed. I can tell how short-sighted that was and will probably upgrade it within the next day or so.
 

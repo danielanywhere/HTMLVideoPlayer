@@ -39,9 +39,7 @@
 //		To manually encode the click target link,
 //		visit https://www.urlencoder.org/ and click Encode.
 
-//	video - Filename of the video. In this version, the
-//		video is expected to be located in the videos subfolder, and
-//		the parameter name is specified without any folder names.
+//	video - URL encoded filename or URL the video.
 
 var buttonAT = 0;		//	Button available at time.
 var buttonH = 0.0;	//	Height.
@@ -210,7 +208,7 @@ $(document).ready(function()
 	{
 		//	Video filename has been specified.
 		console.log(`Arg found: video=${value}`);
-		videoFilename = value;
+		videoFilename = decodeURIComponent(value);
 	}
 
 	$("#linkTarget").attr("src", `${target}`);
@@ -259,7 +257,7 @@ $(document).ready(function()
 	$("#linkTarget").attr("href", target);
 
 	//	Configure the player.
-	$("#videoPlayer").append(`<source id="videoSource" src="videos/${videoFilename}" />`);
+	$("#videoPlayer").append(`<source id="videoSource" src="${videoFilename}" />`);
 	vid = document.getElementById("videoPlayer");
 	if(vid)
 	{
