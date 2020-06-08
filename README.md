@@ -89,9 +89,6 @@ src=&quot;https&colon;&sol;&sol;danielanywhere.github.io/VideoPlayer.html?showHo
 </blockquote>
 
 ## Demo
-This README file isn't allowed to include an IFRAME view, so the working demo is placed in the VideoPlayer/Index.html example page of my profile page on this website.
+This README file isn't allowed to include an IFRAME view, so the working demo is placed in the VideoPlayer/Index.html example page of my profile page here on GitHub.
 
-Follow this link to see the demo video with a clickable button that appears at 53 seconds.
-
-
-
+Follow [this link](https://danielanywhere.github.io/VideoPlayer/Index.html) to see the demo video with a clickable button that appears at 53 seconds.
