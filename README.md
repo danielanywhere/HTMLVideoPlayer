@@ -6,13 +6,22 @@ To work around that obstacle, a combination video player and overlay control, ho
 
 ![Video player with overlays on a template-based website](images/VideoWithOverlayProcess.png)
 
+## Needed Files
+To run the VideoPlayer from a site of your choosing, you will need the following files from this repository.
+
+ - VideoPlayer.html
+ - VideoPlayer.css
+ - VideoPlayer.js
+
+Additionally, for this version of the control, you will need a <b>./videos</b> subfolder that contains the video to be displayed. I can tell how short-sighted that was and will probably upgrade it within the next day or so.
+
+## Current Control State
 In the example at the bottom of this page, an &lt;iframe&gt; element is used to display a basic movie with a clickable overlay control, enabled at 53 seconds, and embedded into the intended web page.
 
 In the current version, the clickable overlay only supports a link to another page that opens in a new tab, and it only provides a transparent hotspot for that link. This means you will need to provide your own formatted button image in the video you intend to highlight. To help with positioning the hotspot over your button image, though, you can turn on the hot spot indicator to highlight the full area sensitive to your button click.
 <br /><br />
 
 ## Getting Started
-
 To use the embedded iframe control, set its <b>width</b> and <b>height</b> attributes to the width and height to be displayed on the host web page, then follow these instructions to set the value of the <b>src</b> attribute to load the video and control the hotspot card.
 <br /><br />
 

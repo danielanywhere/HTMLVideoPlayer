@@ -1,3 +1,12 @@
+//	VideoPlayer.js
+//	HTML video player with YouTube-style button overlay,
+//	usable within any templated webpage that supports
+//	IFRAME, such as WordPress, Wix, Sites, etc.
+
+//	Copyright (c). 2020 Daniel Patterson, MCSD (danielanywhere)
+//	Released for public access under the MIT License.
+//	http://www.opensource.org/licenses/mit-license.php
+
 //	URL Parameters.
 
 //	buttonTop - Distance of the button from the top of the video,
