@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<script type="text/javascript" src="scripts/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="scripts/ConfigureIFrame.js"></script>
+	<link type="text/css" rel="stylesheet" href="VideoPlayer.css" />
+	<title>Configure HTML Video Player</title>
+</head>
+<body>
+	<h1>Configure HTML Video Player</h1>
+	<p>Use this page to configure the IFRAME settings for your video viewport.</p>
+
+	<h2>Getting Started</h2>
+	<ul>
+		<li>If you have a picture of the video frame where the buttons are visible,
+			copy it to the clipboard from Paint or other typical bitmap editor, or;
+		</li>
+		<li>Run your video in full-screen. During the time the buttons are
+			visible in the frame, press [PtrScr] to copy the screen to your clipboard,
+			then;<br /><br />
+		</li>
+		<li>Switch the focus back to this screen, and click inside the area
+			with the black outline to select that area.</li>
+		<li>Press [Ctrl][V] to paste the image in the box, then scroll down to
+			set the controls for the button.</li>
+	</ul>
+	<div id="frameContainer" style="position:relative;display:inline-block">
+		<canvas id="workingImage" width="700" height="394">
+		</canvas>
+		<!-- Link button. -->
+		<div id="divLink" class="overlay-template" style="top: 0%; left: 0%; width: 10%; height: 10%">
+			<a id="linkTarget" href="" target="_blank"><div class="overlay1area"></div></a>
+		</div>
+	</div>
+	<table>
+		<tr>
+			<td>Viewport width:</td>
+			<td><input id="txtViewWidth" type="text" value="700" /></td>
+			<td>Viewport height:</td>
+			<td><input id="txtViewHeight" type="text" value="394" /></td>
+		</tr>
+		<tr>
+			<td>Button Left:</td>
+			<td><input id="slideLeft" type="range" min="0" max="95" value="0"
+				oninput="slideLeftInput()" /></td>
+			<td>Button Top:</td>
+			<td><input id="slideTop" type="range" min="0" max="95" value="0"
+				oninput="slideTopInput()" /></td>
+		</tr>
+		<tr>
+			<td>Button Width:</td>
+			<td><input id="slideWidth" type="range" min="5" max="100" value="10"
+				oninput="slideWidthInput()" /></td>
+			<td>Button Height:</td>
+			<td><input id="slideHeight" type="range" min="5" max="100" value="10"
+				oninput="slideHeightInput()" /></td>
+		</tr>
+		<tr>
+			<td>Button enable at (seconds):</td>
+			<td colspan="3">
+				<input id="txtTime" type="text" style="width:100%;" value="0" />
+			</td>
+		</tr>
+		<tr>
+			<td>VideoPlayer Location:</td>
+			<td colspan="3"><input id="txtPlayer" type="text" style="width:100%;" 
+				value="https://danielanywhere.github.io/VideoPlayer/VideoPlayer.html"/></td>
+		</tr>
+		<tr>
+			<td>Video filename or URL:</td>
+			<td colspan="3"><input id="txtVideo" type="text" style="width:100%;" /></td>
+		</tr>
+		<tr>
+			<td>Link target URL:</td>
+			<td colspan="3"><input id="txtTarget" type="text" style="width:100%;" /></td>
+		</tr>
+		<tr>
+			<td colspan="3" style="color: lightgray;">Click [Generate IFRAME], then copy your code from below.</td>
+			<td><input type="button" value="Generate IFRAME" onclick="generateIFrame()" /></td>
+		</tr>
+	</table>
+	<textarea id="srcIFrame" style="width:700px; height:100px">&nbsp;</textarea>
+</body>
+</html>

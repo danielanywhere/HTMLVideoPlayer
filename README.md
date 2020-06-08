@@ -14,7 +14,10 @@ To run the VideoPlayer from a site of your choosing, you will need the following
  - scripts/jquery-3.4.1.min.js
  - scripts/VideoPlayer.js
 
-Additionally, for this version of the control, you will need a <b>./videos</b> subfolder that contains the video to be displayed. I can tell how short-sighted that was and will probably upgrade it within the next day or so.
+## Configuring Your Video
+A configuration page has been added to help you configure your overlay code for the VideoPlayer.html control. That page can be used on my profile page [here](https://danielanywhere.github.io/VideoPlayer/ConfigurePlayer.html).
+
+Paste a single frame of your video into the viewer, adjust the sliders to surround your button, fill in the names, and the IFRAME code will be generated for you automatically. If using the configuration page, you can probably skip the rest of the information on this page, unless you want to see the [preconfigured demo page](https://danielanywhere.github.io/VideoPlayer/Index.html).
 
 ## Current Control State
 In the example at the bottom of this page, an &lt;iframe&gt; element is used to display a basic movie with a clickable overlay control, enabled at 53 seconds, and embedded into the intended web page.
