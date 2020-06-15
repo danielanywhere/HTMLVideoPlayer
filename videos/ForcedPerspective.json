@@ -1,23 +1,21 @@
 {
-	"HVPVersion": 1.0,
+	"HVPVersion": 1,
 	"ViewPortWidth": 700,
 	"ViewPortHeight": 394,
-	"Buttons":
-	[
+	"Buttons": [
 		{
 			"ButtonName": "Learn more target",
 			"ButtonTarget": "TestTarget.html?context=b1",
-			"ButtonLeft": 10,
+			"ButtonLeft": 1,
 			"ButtonTop": 10,
-			"ButtonWidth": 5,
-			"ButtonHeight": 5,
-			"ButtonHoverColor": "#ffff00",
-			"ButtonBackgroundColor": "#306090",
+			"ButtonWidth": 28,
+			"ButtonHeight": 23,
+			"ButtonHoverColor": "",
+			"ButtonBackgroundColor": "",
 			"ButtonImageName": ""
 		}
 	],
-	"Timelines":
-	[
+	"Timelines": [
 		{
 			"TimelineName": "Learn more",
 			"TimelineButtonName": "Learn more target",
