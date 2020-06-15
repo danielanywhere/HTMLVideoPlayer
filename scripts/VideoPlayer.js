@@ -7,48 +7,19 @@
 //	Released for public access under the MIT License.
 //	http://www.opensource.org/licenses/mit-license.php
 
+//	20200615.1521 - Added support for multiple buttons on multiple timelines.
+//	20200615.1239 - Added support for the URL parameter configFile.
+//	20200615.1237 - Removed support for the URL parameters buttonTop,
+//		buttonBottom, buttonLeft, buttonRight, buttonWidth, buttonTime,
+//		showHotspot, target, and video. Those values are now all controlled
+//		from the configuration file.
+
 //	URL Parameters.
 
-//	buttonTop - Distance of the button from the top of the video,
-//		as a percentage. This parameter is mutually exclusive with
-//		buttonBottom.
+//	configFile - URL or filename of the configuration file to load.
 
-//	buttonBottom - Distance of the button from the bottom of the
-//		video, as a percentage. This parameter is mutually exclusive
-//		with buttonTop.
-
-//	buttonLeft - Distance of the button from the left side of the
-//		video, as a percentage. This parameter is mutually exclusive
-//		with buttonRight.
-
-//	buttonRight - Distance of the button from the right side of
-//		the video, as a percentage. This parameter is mutually
-//		exclusive with buttonLeft.
-
-//	buttonWidth - The width of the button, as a percentage.
-//	buttonHeight - The height of the button, as a percentage.
-
-//	buttonTime -
-//		Total number of seconds at which the button becomes available.
-
-//	showHotspot - 1 to show a box where the hotspot where the click
-//		will be expected. Otherwise, 0.
-
-//	target - The url of the target page to load when the overlay
-//		button has been clicked. This value must be URL encoded.
-//		To manually encode the click target link,
-//		visit https://www.urlencoder.org/ and click Encode.
-
-//	video - URL encoded filename or URL the video.
-
-var buttonAT = 0;		//	Button available at time.
-var buttonH = 0.0;	//	Height.
-var buttonS = false;	//	Value indicating whether to show hotspot.
-var buttonV = true;	//	Button visible.
-var buttonW = 0.0;	//	Width.
-var buttonX = 0.0;	//	X coordinate.	Right align if negative.
-var buttonY = 0.0;	//	Y coordinate.	Bottom align if negative.
-var target = "";			//	Target URL.
+var configData = {};	//	Configuration data;
+var videoControl = null;
 var videoFilename = "";	//	Name of the file to load.
 
 //----------
@@ -81,6 +52,41 @@ function getQueryValue(name)
 //----------
 
 //----------
+// highlightOff
+//----------
+/**
+	* Hide the highlight for the specified overlay.
+	* @param {string} name Name of the control with the highlight to hide.
+	* @returns {undefined}
+	*/
+function highlightOff(name)
+{
+	if(name)
+	{
+		$(`#${name}`).css("border", "0");
+	}
+}
+//----------
+
+//----------
+// highlightOn
+//----------
+/**
+	* Show the highlight on the specified overlay.
+	* @param {string} name Name of the control where the highlight will be displayed.
+	* @param {string} color Color of the highlight for this control.
+	* @returns {undefined}
+	*/
+function highlightOn(name, color)
+{
+	if(name && color)
+	{
+		$(`#${name}`).css("border", `2px solid ${color}`);
+	}
+}
+//----------
+
+//----------
 // onTimeUpdate
 //----------
 /**
@@ -88,33 +94,127 @@ function getQueryValue(name)
 	*/
 function onTimeUpdate()
 {
-	var vid = document.getElementById("videoPlayer");
+	var element = "";
+	var id = "";
+	var options = "";
 	var time = 0;
+	var value = "";
 
-	if(vid)
+	if(videoControl && configData.Timelines)
 	{
-		time = vid.currentTime
+		time = videoControl.currentTime;
+		if(!configData.Initialized)
+		{
+			//	Initialize all buttons.
+			configData.Buttons.forEach(function(item, index)
+			{
+				id = `id="overlay${index}"`;
+				options = "";
+				if(item.ButtonHoverColor)
+				{
+					options +=
+						` onmouseover="highlightOn('overlay${index}', ` +
+							`'${item.ButtonHoverColor}')" ` +
+						`onmouseout="highlightOff('overlay${index}')"`;
+				}
+				element =
+					`<div ${id} class="overlay1" ` +
+					`style="` +
+					`opacity:0.0;` +
+					`left:calc(${item.ButtonLeft}%);` +
+					`top:calc(${item.ButtonTop}%);` +
+					`width:calc(${item.ButtonWidth}%);` +
+					`height:calc(${item.ButtonHeight}%);`;
+				if(item.ButtonBackgroundColor)
+				{
+					element += `background-color:${item.ButtonBackgroundColor};`;
+				}
+				element += `"`;
+				element += options;
+				element += `>`;
+				element += `<a id="linkTarget${index}" href="${item.ButtonTarget}" target="_blank">` +
+					`<div class="overlay1area"></div></a></div>`;
+				$("#videoContainer").append(element);
+			});
+			//	Initialize all timelines.
+			configData.Timelines.forEach(function(item, index)
+			{
+				//	This item has not yet been initialized.
+				//	Enable time.
+				value = item.TimelineEnableTime.toString().toLowerCase();
+				if(value != "start" && value != "end")
+				{
+					//	Explicit time.
+						item.TimelineEnableTime = parseInt(value);
+				}
+				else if(value == "start")
+				{
+					//	Start of video.
+					item.TimelineEnableTime = 0;
+				}
+				else
+				{
+					//	End of video.
+					item.TimelineEnableTime = videoControl.duration + 1;
+				}
+				//	Disable time.
+				value = item.TimelineDisableTime.toString().toLowerCase();
+				if(value != "start" && value != "end")
+				{
+					//	Explicit time.
+					item.TimelineDisableTime = parseInt(value);
+				}
+				else if(value == "start")
+				{
+					//	Start of video.
+					item.TimelineDisableTime = 0;
+				}
+				else
+				{
+					//	End of video.
+					item.TimelineDisableTime = videoControl.duration + 1;
+				}
+				item.Visible = false;
+			});
+			configData.Initialized = true;
+		}
 		console.log(`Time update: ${time}`);
-		if(time >= buttonAT)
+		configData.Timelines.forEach(function(timeline, tIndex)
 		{
-			//	The button is visible.
-			if(!buttonV)
+			if(time >= timeline.TimelineEnableTime &&
+				time <= timeline.TimelineDisableTime)
 			{
-				console.log("Set button visible...");
-				$(".overlay1").css("opacity", 1.0);
-				buttonV = true;
+				if(!timeline.Visible)
+				{
+					//	The overlay has entered a visible state. Enable the control.
+					name = timeline.TimelineButtonName;
+					configData.Buttons.some(function(button, bIndex)
+					{
+						if(button.ButtonName == name)
+						{
+							$(`#overlay${bIndex}`).css("opacity", "1.0");
+							return false;
+						}
+					});
+					timeline.Visible = true;
+				}
 			}
-		}
-		else
-		{
-			//	The button is hidden.
-			if(buttonV)
+			else if(timeline.Visible)
 			{
-				console.log("Set button invisible...");
-				$(".overlay1").css("opacity", 0.0);
-				buttonV = false;
+				//	The button associated with this timeline was visible on the
+				//	previous pass. Hide the overlay.
+				name = timeline.TimelineButtonName;
+				configData.Buttons.some(function(button, bIndex)
+				{
+					if(button.ButtonName == name)
+					{
+						$(`#overlay${bIndex}`).css("opacity", "0.0");
+						return false;
+					}
+				});
+				timeline.Visible = false;
 			}
-		}
+		});
 	}
 }
 //----------
@@ -129,145 +229,72 @@ $(document).ready(function()
 {
 	//	Get command-line parameters.
 	var value = "";
-	var vid = null;
 
-	value = getQueryValue("buttonTop");
+	videoControl = document.getElementById("videoPlayer");
+
+	value = getQueryValue("configFile");
 	if(value.length > 0)
 	{
-		//	Button top has been specified.
-		console.log(`Arg found: buttonTop=${value}`);
-		buttonY = parseFloat(value);
-	}
-	value = getQueryValue("buttonBottom");
-	if(value.length > 0)
-	{
-		//	Button bottom has been specified.
-		console.log(`Arg found: buttonBottom=${value}`);
-		buttonY = 0.0 - parseFloat(value);
-	}
-
-	value = getQueryValue("buttonLeft");
-	if(value.length > 0)
-	{
-		//	Button left has been specified.
-		console.log(`Arg found: buttonLeft=${value}`);
-		buttonX = parseFloat(value);
-	}
-	value = getQueryValue("buttonRight");
-	if(value.length > 0)
-	{
-		//	Button right has been specified.
-		console.log(`Arg found: buttonRight=${value}`);
-		buttonX = 0.0 - parseInt(value);
-	}
-
-	value = getQueryValue("buttonWidth");
-	if(value.length > 0)
-	{
-		//	Button width has been specified.
-		console.log(`Arg found: buttonWidth=${value}`);
-		buttonW = parseFloat(value);
-	}
-	else
-	{
-		buttonW = 20.0;
-	}
-	$(".overlay1").css("width", `calc(${buttonW}%)`);
-
-	value = getQueryValue("buttonHeight");
-	if(value.length > 0)
-	{
-		//	Button height has been specified.
-		console.log(`Arg found: buttonHeight=${value}`);
-		buttonH = parseFloat(value);
-	}
-	else
-	{
-		buttonH = 10.0;
-	}
-	$(".overlay1").css("height", `calc(${buttonH}%)`);
-
-	value = getQueryValue("buttonTime");
-	if(value.length > 0)
-	{
-		//	Button available time has been specified.
-		console.log(`Arg found: buttonTime=${value}`);
-		buttonAT = parseInt(value);
-	}
-
-	value = getQueryValue("target");
-	if(value.length > 0)
-	{
-		//	Target URL has been specified.
-		console.log(`Arg found: target=${value}`);
-		target = decodeURIComponent(value);
-	}
-
-	value = getQueryValue("video");
-	if(value.length > 0)
-	{
-		//	Video filename has been specified.
-		console.log(`Arg found: video=${value}`);
-		videoFilename = decodeURIComponent(value);
-	}
-
-	$("#linkTarget").attr("src", `${target}`);
-	if(buttonX >= 0.0)
-	{
-		//	Left aligned.
-		console.log("Button left aligned...");
-		$(".overlay1").css("left", `calc(${buttonX}%)`);
-		$(".overlay1").css("right", "");
-	}
-	else if(buttonX < 0.0)
-	{
-		//	Right aligned.
-		console.log("Button right aligned...");
-		$(".overlay1").css("left", "");
-		$(".overlay1").css("right", `calc(${Math.abs(buttonX)}%)`);
-	}
-
-	if(buttonY >= 0)
-	{
-		//	Top aligned.
-		console.log("Button top aligned...");
-		$(".overlay1").css("top", `calc(${buttonY}%)`);
-		$(".overlay1").css("bottom", "");
-	}
-	else
-	{
-		//	Bottom aligned.
-		console.log("Button bottom aligned...");
-		$(".overlay1").css("top", "");
-		$(".overlay1").css("bottom", `calc(${Math.abs(buttonY)}%)`);
-	}
-
-	//	Button hotspot.
-	value = getQueryValue("showHotspot");
-	if(value.length > 0)
-	{
-		buttonS = (parseInt(value) == 1);
-		if(buttonS)
-		{
-			$(".overlay1").css("background-color", "#ff0000");
-		}
-	}
-
-	//	Configure the target.
-	$("#linkTarget").attr("href", target);
-
-	//	Configure the player.
-	$("#videoPlayer").append(`<source id="videoSource" src="${videoFilename}" />`);
-	vid = document.getElementById("videoPlayer");
-	if(vid)
-	{
-		console.log("Loading video...");
-		//	Set the video timing interrupts.
-		vid.ontimeupdate = function() { onTimeUpdate() };
-		console.log(`Display button at: ${buttonAT} seconds.`);
+		//	Configuration file has been specified.
+		value = decodeURIComponent(value);
+		console.log(`Arg found: configFile=${value}`);
+		loadConfigFile(value);
 	}
 });
 //----------
 
+//----------
+// loadConfigFile
+//----------
+/**
+	* Load an existing configuration file.
+	* @param {string} filename Name of the URL or file to load.
+	*/
+function loadConfigFile(filename)
+{
+	if(filename)
+	{
+		$.getJSON(filename, function(data)
+			{
+				//	On success, data will contain the configuration settings.
+				if(data)
+				{
+					if(data.HVPVersion > 0.0)
+					{
+						//	Any version of file is valid in this version.
+						console.log(`Configuration file loaded: ${filename}`);
+						configData = data;
+						console.log(JSON.stringify(configData));
+						startVideo();
+					}
+				}
+			}
+		);
+	}
+}
+//----------
 
+//----------
+// startVideo
+//----------
+/**
+	* Register video events and start the video specified in the configuration data.
+	* @returns {undefined}
+	*/
+function startVideo()
+{
+	if(configData && configData.VideoName)
+	{
+		//	Configure the player.
+		$("#videoPlayer").
+			append(`<source id="videoSource" src="${configData.VideoName}" />`);
+		if(videoControl)
+		{
+			console.log("Loading video...");
+			//	Set the video timing interrupts.
+			videoControl.ontimeupdate = function() { onTimeUpdate() };
+		}
+	}
+}
+//----------
 	

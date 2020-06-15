@@ -12,7 +12,7 @@
 			"ButtonWidth": 5,
 			"ButtonHeight": 5,
 			"ButtonHoverColor": "#ffff00",
-			"ButtonBackgroundColor": "",
+			"ButtonBackgroundColor": "#306090",
 			"ButtonImageName": ""
 		},
 		{
@@ -22,7 +22,7 @@
 			"ButtonTop": 20,
 			"ButtonWidth": 10,
 			"ButtonHeight": 10,
-			"ButtonHoverColor": "",
+			"ButtonHoverColor": "#ffff7f",
 			"ButtonBackgroundColor": "#ff0000",
 			"ButtonImageName": ""
 		}
@@ -37,11 +37,11 @@
 		},
 		{
 			"TimelineName": "Link Button 1-2",
-			"TimelineButtonName": "Link Button 1",
+			"TimelineButtonName": "Link Button 2",
 			"TimelineEnableTime": 30,
 			"TimelineDisableTime": 40
 		}
 	],
-	"VideoName": "https://danielanywhere.github.io/VideoPlayer/videos/ForcedPerspective-2019051303.mp4"
+	"VideoName": "videos/ForcedPerspective-2019051303.mp4"
 }
 
