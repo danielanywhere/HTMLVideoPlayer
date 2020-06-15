@@ -1,0 +1,47 @@
+{
+	"HVPVersion": 1.0,
+	"ViewPortWidth": 700,
+	"ViewPortHeight": 394,
+	"Buttons":
+	[
+		{
+			"ButtonName": "Link Button 1",
+			"ButtonTarget": "TestTarget.html?context=b1",
+			"ButtonLeft": 10,
+			"ButtonTop": 10,
+			"ButtonWidth": 5,
+			"ButtonHeight": 5,
+			"ButtonHoverColor": "#ffff00",
+			"ButtonBackgroundColor": "",
+			"ButtonImageName": ""
+		},
+		{
+			"ButtonName": "Link Button 2",
+			"ButtonTarget": "TestTarget.html?context=b2",
+			"ButtonLeft": 20,
+			"ButtonTop": 20,
+			"ButtonWidth": 10,
+			"ButtonHeight": 10,
+			"ButtonHoverColor": "",
+			"ButtonBackgroundColor": "#ff0000",
+			"ButtonImageName": ""
+		}
+	],
+	"Timelines":
+	[
+		{
+			"TimelineName": "Link Button 1-1",
+			"TimelineButtonName": "Link Button 1",
+			"TimelineEnableTime": 10,
+			"TimelineDisableTime": 20
+		},
+		{
+			"TimelineName": "Link Button 1-2",
+			"TimelineButtonName": "Link Button 1",
+			"TimelineEnableTime": 30,
+			"TimelineDisableTime": 40
+		}
+	],
+	"VideoName": "https://danielanywhere.github.io/VideoPlayer/videos/ForcedPerspective-2019051303.mp4"
+}
+

@@ -1,10 +1,19 @@
 <!doctype html>
 <html lang="en">
+<!--
+	ConfigurePlayer.html
+	Configuration app for creating JSON data and IFRAME HTML code used to run a
+	video with overlay controls.
+
+	Copyright (c). 2020 Daniel Patterson, MCSD (danielanywhere)
+	Released for public access under the MIT License.
+	http://www.opensource.org/licenses/mit-license.php
+-->
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<script type="text/javascript" src="scripts/jquery-3.4.1.min.js"></script>
-	<script type="text/javascript" src="scripts/ConfigureIFrame.js"></script>
+	<script type="text/javascript" src="scripts/ConfigurePlayer.js"></script>
 	<link type="text/css" rel="stylesheet" href="VideoPlayer.css" />
 	<title>Configure HTML Video Player</title>
 </head>
@@ -34,12 +43,26 @@
 			<a id="linkTarget" href="" target="_blank"><div class="overlay1area"></div></a>
 		</div>
 	</div>
-	<table>
+	<table id="tblSettings">
+		<!-- Buttons Area -->
 		<tr>
-			<td>Viewport width:</td>
-			<td><input id="txtViewWidth" type="text" value="700" /></td>
-			<td>Viewport height:</td>
-			<td><input id="txtViewHeight" type="text" value="394" /></td>
+			<td colspan="4"><h3>Buttons</h3><hr /></td>
+		</tr>
+		<tr>
+			<td>Selected Button:</td>
+			<td><select id="cmboButton" size="5" onchange="cmboButtonChange()"><option name="Button 1">Button 1</option></select></td>
+			<td colspan="2">
+				<input id="btnButtonAdd" type="button" value="Add" onclick="btnButtonAddClick()" />
+				<input id="btnButtonDelete" type="button" value="Delete" onclick="btnButtonDeleteClick()" />
+			</td>
+		</tr>
+		<tr>
+			<td>Unique Name:</td>
+			<td colspan="3"><input id="txtButtonName" type="text" value="Button 1" onchange="txtButtonNameChange()" /></td>
+			<!--
+			<td>Title:</td>
+			<td><input id="txtButtonTitle" type="text" value="Button 1" /></td>
+			-->
 		</tr>
 		<tr>
 			<td>Button Left:</td>
@@ -58,29 +81,121 @@
 				oninput="slideHeightInput()" /></td>
 		</tr>
 		<tr>
-			<td>Button enable at (seconds):</td>
-			<td colspan="3">
-				<input id="txtTime" type="text" style="width:100%;" value="0" />
+			<td>Link target URL:</td>
+			<td colspan="3"><input id="txtButtonTarget" type="text" style="width:100%;" onchange="txtButtonTargetChange()" /></td>
+		</tr>
+		<tr>
+			<td colspan="4" style="color:lightgray">Leave colors and image blank to indicate none...</td>
+		</tr>
+		<tr>
+			<td>Hover Color:</td>
+			<td><input id="txtButtonHoverColor" type="text" onchange="txtButtonHoverColorChange()" /></td>
+			<td>Background Color:</td>
+			<td><input id="txtButtonBackgroundColor" type="text" onchange="txtButtonBackgroundColorChange()" /></td>
+		</tr>
+		<tr>
+			<td>Button Image:</td>
+			<td colspan="3"><input id="txtButtonImage" type="text" style="width:100%" onchange="txtButtonImageChange()" /></td>
+		</tr>
+		<!-- /Buttons Area -->
+		<!-- Timelines Area -->
+		<tr>
+			<td colspan="4"><h3>Timelines</h3><hr /></td>
+		</tr>
+		<tr>
+			<td>Selected Timeline:</td>
+			<td><select id="cmboTimeline" size="5" onchange="cmboTimelineChange()"><option name="button1-1">Button 1-1</option></select></td>
+			<td colspan="2">
+				<input id="btnTimelineAdd" type="button" value="Add" onclick="btnTimelineAddClick()"/>
+				<input id="btnTimelineDelete" type="button" value="Delete" onclick="btnTimelineDelete()" />
 			</td>
+		</tr>
+		<tr>
+			<td>Name:</td>
+			<td><input id="txtTimelineName" type="text" value="Button 1-1" onchange="txtTimelineNameChange()" /></td>
+			<td>Assigned Button:</td>
+			<td>
+				<select id="cmboTimelineButton" onchange="cmboTimelineButtonChange()">
+					<option name="button1">Button 1</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" style="color:lightgray">Valid values are time, in seconds,
+				<b>start</b>, or <b>end</b>.</td>
+		</tr>
+		<tr>
+			<td>Enable Time:</td>
+			<td><input id="txtTimelineEnable" type="text" value="start" onchange="txtTimelineEnableChange()" /></td>
+			<td>Disable Time:</td>
+			<td><input id="txtTimelineDisable" type="text" value="end" onchange="txtTimelineDisableChange()" /></td>
+		</tr>
+		<!-- /Timelines Area -->
+		<!-- Viewport Area -->
+		<tr>
+			<td colspan="4"><h3>Viewport</h3><hr /></td>
+		</tr>
+		<tr>
+			<td>Viewport width:</td>
+			<td><input id="txtViewWidth" type="text" value="700" onchange="txtViewWidthChange()" /></td>
+			<td>Viewport height:</td>
+			<td><input id="txtViewHeight" type="text" value="394" onchange="txtViewHeightChange()" /></td>
+		</tr>
+		<!-- /Viewport Area -->
+		<!-- Video Area -->
+		<tr>
+			<td colspan="4"><h3>Video Location</h3><hr /></td>
+		</tr>
+		<tr>
+			<td>Video filename or URL:</td>
+			<td colspan="3"><input id="txtVideo" type="text" style="width:100%;" onchange="txtVideoChange()" /></td>
+		</tr>
+		<!-- /Video Area -->
+		<!-- Player Area -->
+		<tr>
+			<td colspan="4"><h3>Player Location</h3><hr /></td>
 		</tr>
 		<tr>
 			<td>VideoPlayer Location:</td>
 			<td colspan="3"><input id="txtPlayer" type="text" style="width:100%;" 
-				value="https://danielanywhere.github.io/VideoPlayer/VideoPlayer.html"/></td>
+				value="" onchange="txtPlayerChange()" /></td>
+		</tr>
+		<!-- /Player Area -->
+		<!-- Config File Area -->
+		<tr>
+			<td colspan="4"><h3>Configuration File</h3><hr /></td>
 		</tr>
 		<tr>
-			<td>Video filename or URL:</td>
-			<td colspan="3"><input id="txtVideo" type="text" style="width:100%;" /></td>
+			<td>Load Prev. Config File?</td>
+			<td colspan="3"><input id="txtConfigFilename" type="text" style="width: 80%;" />
+			<input id="btnConfigFilename" type="button" value="Load" onclick="loadConfigFile()" /></td>
 		</tr>
 		<tr>
-			<td>Link target URL:</td>
-			<td colspan="3"><input id="txtTarget" type="text" style="width:100%;" /></td>
+			<td>Configuration File Location:</td>
+			<td colspan="3"><input id="txtConfigLocation" type="text" style="width:100%;" 
+				value="" /></td>
+		</tr>
+		<!-- /Config File Area -->
+		<tr>
+			<td colspan="3" style="color: lightgray;">Click [Generate Data], then copy your JSON and IFRAME codes from below.</td>
+			<td><input id="btnGenerateData" type="button" value="Generate Data" onclick="generateData()" /></td>
 		</tr>
 		<tr>
-			<td colspan="3" style="color: lightgray;">Click [Generate IFRAME], then copy your code from below.</td>
-			<td><input type="button" value="Generate IFRAME" onclick="generateIFrame()" /></td>
+			<td colspan="4"><h3>JSON Configuration</h3><hr /></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				<textarea id="srcJSON" style="width:700px; height:600px">&nbsp;</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4"><h3>IFRAME Code</h3><hr /></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				<textarea id="srcIFrame" style="width:700px; height:100px">&nbsp;</textarea>
+			</td>
 		</tr>
 	</table>
-	<textarea id="srcIFrame" style="width:700px; height:100px">&nbsp;</textarea>
 </body>
 </html>
