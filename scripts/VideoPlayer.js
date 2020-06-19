@@ -7,6 +7,9 @@
 //	Released for public access under the MIT License.
 //	http://www.opensource.org/licenses/mit-license.php
 
+// 20200619.1011 - Bug repair. Anchors were not being hidden, even though their
+//  container divs were. This was causing the first anchor to be always active,
+//  effectively blocking out others in the same position.
 //	20200615.1521 - Added support for multiple buttons on multiple timelines.
 //	20200615.1239 - Added support for the URL parameter configFile.
 //	20200615.1237 - Removed support for the URL parameters buttonTop,
@@ -120,7 +123,6 @@ function onTimeUpdate()
 				element =
 					`<div ${id} class="overlay1" ` +
 					`style="` +
-					`opacity:0.0;` +
 					`left:calc(${item.ButtonLeft}%);` +
 					`top:calc(${item.ButtonTop}%);` +
 					`width:calc(${item.ButtonWidth}%);` +
@@ -135,6 +137,8 @@ function onTimeUpdate()
 				element += `<a id="linkTarget${index}" href="${item.ButtonTarget}" target="_blank">` +
 					`<div class="overlay1area"></div></a></div>`;
 				$("#videoContainer").append(element);
+				$(`#overlay${index} a`).hide();
+				$(`#overlay${index}`).hide();
 			});
 			//	Initialize all timelines.
 			configData.Timelines.forEach(function(item, index)
@@ -152,11 +156,12 @@ function onTimeUpdate()
 					//	Start of video.
 					item.TimelineEnableTime = 0;
 				}
-				else
+				else if(value == "end")
 				{
 					//	End of video.
 					item.TimelineEnableTime = videoControl.duration + 1;
 				}
+				console.log(`Enable ${item.TimelineButtonName} at ${item.TimelineEnableTime}.`);
 				//	Disable time.
 				value = item.TimelineDisableTime.toString().toLowerCase();
 				if(value != "start" && value != "end")
@@ -169,11 +174,12 @@ function onTimeUpdate()
 					//	Start of video.
 					item.TimelineDisableTime = 0;
 				}
-				else
+				else if(value == "end")
 				{
 					//	End of video.
 					item.TimelineDisableTime = videoControl.duration + 1;
 				}
+				console.log(`Disable ${item.TimelineButtonName} at ${item.TimelineDisableTime}.`);
 				item.Visible = false;
 			});
 			configData.Initialized = true;
@@ -188,11 +194,14 @@ function onTimeUpdate()
 				{
 					//	The overlay has entered a visible state. Enable the control.
 					name = timeline.TimelineButtonName;
+					console.log(`Show ${name}.`);
 					configData.Buttons.some(function(button, bIndex)
 					{
 						if(button.ButtonName == name)
 						{
-							$(`#overlay${bIndex}`).css("opacity", "1.0");
+							console.log(`Show Button ${bIndex}`);
+							$(`#overlay${bIndex}`).show();
+							$(`#overlay${bIndex} a`).show();
 							return false;
 						}
 					});
@@ -204,11 +213,13 @@ function onTimeUpdate()
 				//	The button associated with this timeline was visible on the
 				//	previous pass. Hide the overlay.
 				name = timeline.TimelineButtonName;
+				console.log(`Hide ${name}.`);
 				configData.Buttons.some(function(button, bIndex)
 				{
 					if(button.ButtonName == name)
 					{
-						$(`#overlay${bIndex}`).css("opacity", "0.0");
+						$(`#overlay${bIndex} a`).hide();
+						$(`#overlay${bIndex}`).hide();
 						return false;
 					}
 				});
